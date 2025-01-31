@@ -1,0 +1,65 @@
+
+
+    - only 2 player should be able to join
+        - after that its only spectator (In_future)
+    - room Creator is playerX, who joins room is playerO
+    - find a way for other player to not make a move,
+        when other player's turn
+
+
+// state
+{
+    rooms: new Map()
+   { "roomName", new Set["playerX | ws1", "playerO | ws2"]}
+
+    players: new Map()
+   { ["ws1", "playerX"], ["ws2", "playerO"]}
+
+    turn: playerX
+
+}
+
+games new Map()
+
+{
+    "gameId | KFH#1@8", new Set([
+        board: [],
+        players: new Map() { ["ws1", "playerX"], ["ws2", "playerO"]},
+        turn: "X",
+        status: "playing" | "win" | "draw" | "loss",
+        winner: null
+    ])
+}
+
+{
+    "gameId", new Set([
+        board, [],
+        players: new Map(),
+        turnX: true,
+        status: "playing",
+        winner: null
+    ])
+}
+
+winningCombos :
+new Map(new Set)
+
+: {
+    "row1": ["0,0", "0,1", "0,2"],
+    "row2": ["1,0", "1,1", "1,2"],
+    "row3": ["2,0", "2,1", "2,2"],
+
+    "col1": ["0,0", "1,0", "2,0"],
+    "col2": ["0,1", "1,1", "2,1"],
+    "col3": ["0,2", "1,2", "2,2"],
+
+    "diag1": ["0,0", "1,1", "2,2"],
+    "diag2": ["2,0", "1,1", "0,2"]
+}
+
+---
+
+     
+
+---
+
