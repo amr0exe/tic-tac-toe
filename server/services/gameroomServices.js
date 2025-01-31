@@ -1,21 +1,14 @@
-import { gameState } from "../store/store.js"
+import { gameState, Game } from "../store/store.js"
 import { checkGameState, validateMove } from "./moveFilterServices.js"
 
 const joinGameRoom = (ws, roomId) => {
-    // check if that room exists (its means first player -> playerX)
-        // if not create an room with current user as playerX
-    
-    // if room exists   (it means second player -> playerO)
-        // make the client join as playerO
+    if (!gameState.gameRoom.has(roomId)) {
+        const newGame = new Game() // new Game-Instance
+        gameState.games.set(roomId, newGame)
 
-    // for room doesn't exists
-    if (!gameState.gameRoom.has(roomId) || gameState.gameRoom.size === 0) {
-        // create room with current ws as playerX
+        // new-room with current ws as playerX
         gameState.gameRoom.set(roomId, new Set([ws]))
-
-        // assing first ws as playerX
-        gameState.players.set(ws, "X")
-        console.log("these are rooms and players ", gameState.gameRoom, gameState.players.values())
+        newGame.players.set(ws, 'X')
         return
     }
 
@@ -28,22 +21,15 @@ const joinGameRoom = (ws, roomId) => {
         return
     }
 
-    // for room exits
-    // add ws in room
-    gameState.gameRoom.get(roomId).add(ws)
-
-    // assigning second ws as playerO
-    gameState.players.set(ws, "O")
-
-    
-    // info-logging
-    console.log("Room size: ", currentRoom.size)
-    console.log("these are rooms and players ", gameState.gameRoom, gameState.players.values())
+    // adding second player
+    currentRoom.add(ws)
+    const game = gameState.games.get(roomId)
+    game.players.set(ws, 'O')
 }
 
 const broadcast_to_room = (ws, roomId, index) => {
-    // if gameEnded or duplicate move => return immediately
-    if (gameState.gameEnded || gameState.board[index]) return 
+    const game = gameState.games.get(roomId)
+    if (!game || game.gameEnded || game.board[index]) return
 
     // check for room existence
     if (!gameState.gameRoom.has(roomId)) {
@@ -51,32 +37,29 @@ const broadcast_to_room = (ws, roomId, index) => {
         return
     }
 
-    if (!validateMove(index)) {
+    if (!validateMove(index, game)) {
         return
     }
-    gameState.board[index] = gameState.turn
 
-    const players = gameState.gameRoom.get(roomId).values()
+    game.board[index] = game.turn
+
+
+    const players = gameState.gameRoom.get(roomId)
     players.forEach( client => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({
                 "type": "move",
-                "board": gameState.board
+                "board": game.board,
+                "turn": game.turn
             }))
         }
     })
 
-    console.log("board", gameState.board)
-
-    if (checkGameState(ws)) {
+    if (checkGameState(ws, game, roomId)) {
         return
     }
 
-    if (gameState.turn === 'O') {
-        gameState.turn = 'X'
-        return
-    }
-    gameState.turn = 'O'
+    game.turn = game.turn === 'X' ? 'O' : 'X'
 }
 
 export { joinGameRoom, broadcast_to_room }

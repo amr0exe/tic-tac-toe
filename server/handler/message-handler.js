@@ -1,6 +1,8 @@
 import { wss } from "../app.js"
 import { joinGameRoom, broadcast_to_room } from "../services/gameroomServices.js"
 import { reset_board } from "../services/moveFilterServices.js"
+import { Game, gameState } from "../store/store.js"
+
 
 /*const broadcast_move = (ws, move, turn) => { 
     wss.clients.forEach(client => {
@@ -31,8 +33,12 @@ const messageHandler = (ws, msg) => {
                 break
 
             case "reset-board":
-                reset_board()
+                reset_board(ws, data.roomId)
                 break
+
+            default: 
+                console.log("unknown message type", data.type)
+                return
         }
 
     } catch(err) {

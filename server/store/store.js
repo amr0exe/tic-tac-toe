@@ -1,12 +1,8 @@
 
 const gameState = {
-    board: Array(9).fill(null),
+    games: new Map(),
     gameRoom: new Map(),
-    players: new Map(),
-    spectator: new Map(),
-    turn: 'X',
-    gameEnded: false,
-    winner: null
+    spectator: new Map()
 }
 
 const winningCombos = [
@@ -15,5 +11,21 @@ const winningCombos = [
     [0, 4, 8], [2, 4, 6]    // diagonal
 ]
 
+export class Game {
+    constructor() {
+        this.board = Array(9).fill(null)
+        this.players = new Map()
+        this.turn = 'X'
+        this.gameEnded = false
+        this.winner = null
+    }
+
+    reset() {
+        this.board = Array(9).fill(null)
+        this.turn = 'X'
+        this.gameEnded = false
+        this.winner = null
+    }
+}
 
 export { gameState, winningCombos }
