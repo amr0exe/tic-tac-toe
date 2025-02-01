@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
-import { messageHandler } from "./handler/messageHandler";
-import { handleDisconnect } from "./services/disconnection";
+import { messageHandler } from "./handler/messageHandler.js";
+import { handleDisconnect } from "./services/disconnection.js";
 
 const wss = new WebSocketServer({ port: 8080 })
 

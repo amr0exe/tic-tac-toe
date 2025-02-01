@@ -45,6 +45,7 @@ const broadcast_to_room = (ws, roomId, index) => {
 
 
     const players = gameState.gameRoom.get(roomId)
+    game.turn = game.turn === 'X' ? 'O' : 'X'
     players.forEach( client => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({
@@ -58,8 +59,6 @@ const broadcast_to_room = (ws, roomId, index) => {
     if (checkGameState(ws, game, roomId)) {
         return
     }
-
-    game.turn = game.turn === 'X' ? 'O' : 'X'
 }
 
 export { joinGameRoom, broadcast_to_room }

@@ -1,6 +1,0 @@
-
-const handleDisconnect = () => {
-
-}
-
-export { handleDisconnect }

@@ -4,11 +4,13 @@ import MyContext from "../context/context"
 
 function Game() {
     const [board, setBoard] = useState(Array(9).fill(null))
-    const {roomId, setRoomId} =  useContext(MyContext)
+    const {roomId } =  useContext(MyContext)
+    const [winner, setWinner] = useState("playing")
+    const [turn, setTurn] = useState(" X")
+
+    const navigate = useNavigate()
     const socket = useRef(null)
     const isMounted = useRef(false)
-    const navigate = useNavigate()
-    const [winner, setWinner] = useState("")
 
     useEffect(() => {
         isMounted.current = true
@@ -39,6 +41,7 @@ function Game() {
 
                 case "move":
                     setBoard(data.board)
+                    setTurn(data.turn)
                     console.log("board is this: ", data.board)
                     break
 
@@ -51,9 +54,13 @@ function Game() {
                     break
 
                 case "room-full":
-                    setRoomId("")
                     navigate("/")
                     console.log("Room-full!, join anotherOne...")
+                    break
+                
+                case "game-reset":
+                    setBoard(data.board)
+                    setWinner("playing")
                     break
             }
         }
@@ -86,7 +93,8 @@ function Game() {
 
     const handleReset = () => {
         socket.current.send(JSON.stringify({ 
-            type: "reset-board"
+            type: "reset-board",
+            roomId
         }))
     }
 
@@ -96,8 +104,11 @@ function Game() {
             {/* GameState */}
             <div>
                 <p className="text-center text-slate-700 text-2xl">GameState</p>
-                {/* waiting | playing | ended */}
-                <p className="text-center text-slate-500 mb-5">waiting | X turn</p>
+                <p className="text-center text-slate-500">room: {roomId}</p>
+                <p className="text-center text-slate-500 mb-5">
+                    winner | {winner} | 
+                    {winner === "playing" && <span> {turn}&apos;s turn</span>}
+                </p>
             </div>
 
             {/* Board */}
@@ -115,7 +126,7 @@ function Game() {
 
             <button 
                 className="p-3 mt-5 rounded-sm bg-blue-400 text-white cursor-pointer"
-                onClick={() => handleReset}
+                onClick={handleReset}
             >Reset</button>
         </div>
 
