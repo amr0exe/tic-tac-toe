@@ -9,6 +9,12 @@ const joinGameRoom = (ws, roomId) => {
         // firstPlayer -> X
         gameState.gameRooms.set(roomId, new Set([ws]))
         newGame.players.set(ws, 'X')
+
+        // send to client
+        ws.send(JSON.stringify({
+            type: "player-type",
+            name: newGame.players.get(ws)
+        }))
         return
     }
 
@@ -25,6 +31,10 @@ const joinGameRoom = (ws, roomId) => {
     currentRoom.add(ws)                         
     const game = gameState.games.get(roomId)    // get game
     game.players.set(ws, 'O')                   // add second player as O 
+    ws.send(JSON.stringify({                    // send player-type to client
+        type: "player-type",
+        name: game.players.get(ws)
+    }))
 } 
 
 const broadcast_to_room = (ws, roomId, index) => {

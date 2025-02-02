@@ -7,6 +7,7 @@ function Game() {
     const {roomId } =  useContext(MyContext)
     const [winner, setWinner] = useState("playing")
     const [turn, setTurn] = useState(" X")
+    const [playerType, setPlayerType] = useState("")
 
     const navigate = useNavigate()
     const socket = useRef(null)
@@ -62,6 +63,10 @@ function Game() {
                     setBoard(data.board)
                     setWinner("playing")
                     break
+
+                case "player-type":
+                    setPlayerType(data.name)
+                    break
             }
         }
 
@@ -109,6 +114,7 @@ function Game() {
                     winner | {winner} | 
                     {winner === "playing" && <span> {turn}&apos;s turn</span>}
                 </p>
+                <p className="text-center text-slate-500">player {playerType}</p>
             </div>
 
             {/* Board */}
