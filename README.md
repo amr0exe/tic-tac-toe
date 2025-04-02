@@ -1,33 +1,44 @@
 
-###### In Progress...       
+<h2 align="center">Introduction</h2>
+A real-time multiplayer tic-tac-toe game that supports multiple concurrent games rooms with isolated instances for each match. Built with client-server architecture, clients responsible for UI only, all GameLogic is handled serverside with Websockets.
 
 
+## Architecture Overview
+### RoomLogic:
 
-<h2 align="center"> Functionality </h2>
-
-__Room:__
-- players can either **create** | **join** room
-- room-creater will be **playerX**
-- second-joiner will be **playerO**
-- game supports multiple game-rooms
-- each game-room can only supports 2 players
-- Others, are forced-out to join other rooms
-
----
-
-__GameLogic:__
-- multiple players can play game parallely in different rooms
-- Game-moves are filtered, handled in real-time through websockets
-- __Game-Logic__ is handled __server-side__, To prevent-chances of cheating
-- **client-side** is only responsible for receiving and **rendering board** and results
-- Each game with their own instance resulting in isolated game & no-conflict-of-state
+- __Creation and Joining__
+    - players can create a new room or join an existing one
+    - roomCreator is designated as __Player X__ and SecondJoiner as __Player X__
+- __Multi-Room Support__
+    - application allows multiple games to run concurrently
+    - each room is limited to 2 players. If additional players attempt to join. They are redirected to join other available room.
 
 
----
----
+## Installation & Setup
 
-__TODO__: 
-- minor UI improvements [score, better turn-ticker & game-status ... ]
-- implement spectator feature
+- Clone the repo:
+    ```
+    git clone https://github.com/amr0exe/tic-tac-toe.git && cd tic-tac-toe
+    ```
+- Install dependencies:
+    ```
+    pnpm install (on both client & working-backend)
+    ```
+- Running the app:
+    ```
+    pnpm run dev (on client)
+    pnpm start   (on working-backend)
+    ```
 
+## Game Images
+
+<div align="center">
+    <img src="assests/tic-tac2.png" alt="Game_Room" height="490" width="500"/>
+    <img src="assests/tic-tac1.png" alt="In_Game_State" height="400" width="800"/>
+</div>
+
+## Future Enhancements
+
+- adding a leaderboard
+- implementing spectator-mode
 
